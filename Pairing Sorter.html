@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html>
+ <body>
+  <div id="header" align="center">
+    <h1>Pairing Sorter</h1>
+    <h3>Sorter for JetBlue Pairing Files</h3>
+ 	  <input type="file" id="file" name="file"/ oninput="toggle('optionsmenu')">
+    <output id="list"></output>
+    <hr/>
+  </div>
+  <div align="center" id="optionsmenu" style="display:none">
+    <h3>Choose Sorting Options</h3>
+    <table style="border-spacing:20px" id="optionTable">
+    <tr align="left">
+      <th>
+        <input type="checkbox" id="opt1" align="left" onchange="optToggle(this.id)">Days
+        <div id="opt1div" style="display:none">
+          <p>List, Range, or Both (ex. 5,6,9-15)</p>
+          <input type="text"/>
+        </div>
+      </th>
+      <th>
+        <input type="checkbox" id="opt2" align="left" onchange="optToggle(this.id)">Land In
+        <div id="opt2div" style="display:none">
+          <p>IATA Code</p>
+          <input type="text"/>
+        </div>
+      </th>
+      <th>
+        <input type="checkbox" id="opt3" align="left" onchange="optToggle(this.id)">Total Block Time
+        <div id="opt3div" style="display:none">
+          <p>Time (---:--)</p>
+          <select name="sign">
+            <option value=">=">>=</option>
+            <option value="<="><=</option>
+          </select>
+          <input type="text"/>
+        </div>
+      </th>
+    </tr>
+    <tr align="left">
+      <th>
+        <input type="checkbox" id="opt4" align="left" onchange="optToggle(this.id)">Trip Length
+        <div id="opt4div" style="display:none">
+          <p>Length
+          <select>
+            <option value=">=">>=</option>
+            <option value="<="><=</option>
+          </select>
+          <select>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+          </select>
+          </p>
+        </div>
+      </th>
+      <th>
+        <input type="checkbox" id="opt5" align="left" onchange="optToggle(this.id)">Total Number of Legs
+        <div id="opt5div" style="display:none">
+          <p># Legs
+          <select>
+            <option value=">=">>=</option>
+            <option value="<="><=</option>
+          </select>
+          <select>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
+            <option value="10">10</option>
+            <option value="11">11</option>
+            <option value="12">12</option>
+            <option value="13">13</option>
+            <option value="14">14</option>
+            <option value="15">15</option>
+          </select>
+          </p>
+        </div>
+      </th>
+      <th>
+        <input type="checkbox" id="opt6" align="left" onchange="optToggle(this.id)">Redeye
+        <div id="opt6div" style="display:none">
+          <p>
+          <select>
+            <option value="true">Allow</option>
+            <option value="false">Avoid</option>
+          </select>
+          </p>
+        </div>
+      </th>
+    </tr>
+    <tr align="left">
+      <th>
+        <input type="checkbox" id="opt7" align="left" onchange="optToggle(this.id)">Check-in Time
+        <div id="opt7div" style="display:none">
+          <p>Time (--:--)</p>
+          <select name="sign">
+            <option value=">=">>=</option>
+            <option value="<="><=</option>
+          </select>
+          <input type="text"/>
+        </div>
+      </th>
+      <th>
+        <input type="checkbox" id="opt8" align="left" onchange="optToggle(this.id)">Flight Number
+        <div id="opt8div" style="display:none">
+          <p>
+            <input type="text"/>
+          </p>
+        </div>
+      </th>
+      <th>
+        <input type="checkbox" id="opt9" align="left" onchange="optToggle(this.id)">Number of Deadheads
+        <div id="opt9div" style="display:none">
+          <p># DH
+          <select>
+            <option value=">=">>=</option>
+            <option value="<="><=</option>
+          </select>
+          <select>
+            <option value="0">0</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+            <option value="6">6</option>
+            <option value="7">7</option>
+            <option value="8">8</option>
+            <option value="9">9</option>
+            <option value="10">10</option>
+          </select>
+          </p>
+        </div>
+      </th>
+    </tr>
+    <tr align="left">
+      <th>
+        <input type="checkbox" id="opt10" align="left" onchange="optToggle(this.id)">Check-out Time
+        <div id="opt10div" style="display:none">
+          <p>Time (--:--)</p>
+          <select name="sign">
+            <option value=">=">>=</option>
+            <option value="<="><=</option>
+          </select>
+          <input type="text"/>
+        </div>
+      </th>
+      <th>
+        <input type="checkbox" id="opt11" align="left" onchange="optToggle(this.id)">TAFB/TT
+        <div id="opt11div" style="display:none">
+          <p>Ratio (--:--)</p>
+          <select name="sign">
+            <option value=">=">>=</option>
+            <option value="<="><=</option>
+          </select>
+          <input type="text"/>
+        </div>
+      </th>
+      <th>
+        <input type="checkbox" id="opt12" align="left" onchange="optToggle(this.id)">Total Soft Time
+        <div id="opt12div" style="display:none">
+          <p>Credit-Block(---:--)</p>
+          <select name="sign">
+            <option value=">=">>=</option>
+            <option value="<="><=</option>
+          </select>
+          <input type="text"/>
+        </div>
+      </th>
+    </tr>
+    <tr align="left">
+      <th>
+        <input type="checkbox" id="opt13" align="left" onchange="optToggle(this.id)">Time Away From Base
+        <div id="opt13div" style="display:none">
+          <p>Time (---:--)</p>
+          <select name="sign">
+            <option value=">=">>=</option>
+            <option value="<="><=</option>
+          </select>
+          <input type="text"/>
+        </div>
+      </th>
+      <th>
+        <input type="checkbox" id="opt14" align="left" onchange="optToggle(this.id)">Average Daily Credit
+        <div id="opt14div" style="display:none">
+          <p>Credit (---:--)</p>
+          <select name="sign">
+            <option value=">=">>=</option>
+            <option value="<="><=</option>
+          </select>
+          <input type="text"/>
+        </div>
+      </th>
+    </tr>
+    </table>
+    <input type="submit" value="Search" id="submitopts" onclick="toggle('results')">
+    <hr/>
+  </div>
+  <div align="center" id="results" style="display:none">
+    <h3>Results</h3>
+    <p id=resultsoutput></p>
+    <input type="submit" value="Reset" id="reset" onclick="resetcommand('results')"/>
+    <hr/>
+  </div>
+  <div align="left" id="pairing">
+
+  </div>
+    
+
+  <script language="javascript" type="text/javascript">
+
+    first = true;
+    sql_command = 'SELECT DISTINCT pairings.pairing_number FROM pairings JOIN legs ON pairings.refnum = legs.refnum WHERE ';
+
+  function processTime(strtime){
+    var timelist = strtime.split(":");
+    var hours = parseInt(timelist[0]);
+    var minutes = parseInt(timelist[1]);
+    var totalmin = minutes + (hours * 60);
+    return totalmin;
+  }
+
+  function reverseProcessTime(totalmin){
+    var hours = Math.floor(totalmin/60);
+    var minutes = Math.abs(totalmin%60);
+    if(minutes < 10){
+      var strtime = hours.toString(10) + ":0" + minutes.toString(10);
+    }
+    else{
+    var strtime = hours.toString(10) + ":" + minutes.toString(10);
+    }
+    return strtime;
+  }
+
+  function handleFileSelect(evt) {
+    var months = {"JAN": 1, "FEB": 2, "MAR": 3, "APR": 4, "MAY": 5, "JUN": 6, "JUL": 7, "AUG": 8, "SEP": 9, "SEPT": 9, "OCT": 10, "NOV": 11, "DEC": 12};
+    var pairNum = undefined;
+    var checkin = undefined;
+    var checkout = undefined;
+    var duty = undefined;
+    var month = undefined;
+    var year = undefined;
+    var credit = undefined;
+    var tafb = undefined;
+    var ca = undefined;
+    var fo = undefined;
+    var dayNum = undefined;
+    var dh = 0;
+    var flight = undefined;
+    var dep = undefined;
+    var arr = undefined;
+    var loctimedep = undefined;
+    var loctimearr = undefined;
+    var turn = undefined;
+    var eqp = undefined;
+    var eqpChange = 0;
+    var blocktot = undefined;
+    var numlegs = 0;
+    var numdh = 0;
+    var prevdaynum = undefined;
+    var part1=false;
+    var part2=false;
+    var part3=false;
+    var part4=false;
+
+    var count = 1;
+    lines = [];
+    var temp;
+
+    var db = openDatabase('pairsortdb', '1.0', 'database for jb pairing files', 10 * 1024 * 1024);
+  	var f = evt.target.files[0];
+    var reader = new FileReader();
+
+
+    reader.onload = (function(theFile) {
+      return function(e) {
+        db.transaction(function (tx) {
+          tx.executeSql('CREATE TABLE IF NOT EXISTS pairings (refnum SMALLINT, pairing_number VARCHAR(10), checkin INT, checkout INT, length SMALLINT, month SMALLINT, year SMALLINT, credit INT, block_total INT, duty_total INT, TAFB INT, num_legs SMALLINT, num_dh SMALLINT, ca SMALLINT, fo SMALLINT)');
+          tx.executeSql('CREATE TABLE IF NOT EXISTS legs (refnum SMALLINT, day_number SMALLINT, deadhead TINYINT, flight_number VARCHAR(10), dep_loc VARCHAR(5), dep_loc_time INT, arr_loc VARCHAR(5), arr_loc_time INT, turn INT, equipment VARCHAR(10), eqpchange TINYINT)');
+          tx.executeSql('CREATE TABLE IF NOT EXISTS calendar (refnum SMALLINT, day SMALLINT)');
+          tx.executeSql('DELETE FROM pairings');
+          tx.executeSql('DELETE FROM legs');
+          tx.executeSql('DELETE FROM calendar');
+        });
+    			var temp = e.target.result;
+    			splittemp = temp.split("\n");
+    			for(var i = 0; i<splittemp.length; i++){
+    				lines.push(splittemp[i]);
+    			}
+          db.transaction(function (tx) {
+          for(var i=0; i<lines.length; i++){
+            if(lines[i].startsWith("+--")){
+              continue;
+            }
+            if(lines[i].startsWith("Day")){
+              continue;
+            }
+            if(lines[i].startsWith("END")){
+              continue;
+            }
+            if(part1 == false){
+              var p = /([A-Z]\d{4}|[A-Z]\d[A-Z]\d{2})\s+Check-In\s+(\d{2}:\d{2})\s+Check-Out\s+(\d{2}:\d{2})\s+(\d)-Day\s+([A-Z]{3,4})\s+(\d{4})/g;
+              var m = p.exec(lines[i]);
+              if(m != null){
+                pairNum = m[1];
+                checkin = processTime(m[2]);
+                checkout = processTime(m[3]);
+                length = m[4];
+                month = months[m[5]];
+                year = m[6];
+                part1 = true;
+                continue;
+              }
+            }
+            if(part2 == false){
+              var p = /\s+(\d)*\s+(DH)*\s+(\w{4})\s+([A-Z]{3,4})\s+(\d{2}:\d{2})\s+([A-Z]{3,4})\s+(\d{2}:\d{2})\s+(\d{3}:\d{2})*\s+(\w{3})*\s+\d{3}:\d{2}\s+(\*)*/g;
+              var m = p.exec(lines[i]);
+              if(m != null){
+                numlegs += 1;
+                dayNum = m[1];
+                if(dayNum == ''){
+                  dayNum = prevdaynum;
+                }
+                temp = m[2];
+                if(temp == "DH"){
+                  numdh += 1;
+                  dh = 1;
+                }
+                flight = m[3];
+                dep = m[4];
+                loctimedep = processTime(m[5]);
+                arr = m[6];
+                loctimearr = processTime(m[7]);
+                if(m[8] != undefined){
+                  turn = processTime(m[8]);
+                }
+                eqp = m[9];
+                if(m[9]==undefined){
+                  eqp = null;
+                }
+                temp = m[10];
+                if(temp == "*"){
+                  eqpChange = 1;
+                }
+                function func1(a,b,c,d,e,f,g,h,i,j,k){
+                  tx.executeSql('INSERT INTO legs (refnum, day_number, deadhead, flight_number, dep_loc, dep_loc_time, arr_loc, arr_loc_time, turn, equipment, eqpchange) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)',
+                                                 [a,b,c,d,e,f,g,h,i,j,k]);
+                }
+                func1(count, parseInt(dayNum), dh, flight, dep, loctimedep, arr, loctimearr, turn, eqp, eqpChange);
+                predaynum = dayNum;
+                dayNum=flight=dep=loctimedep=arr=loctimearr=turn=eqp=null;
+                dh=eqpChange=lastleg=0;
+                continue;
+              }
+            }
+            if(part3 == false){
+              var p = /Credit:\s+(\d{3}:\d{2})\s+(\d{3}:\d{2})\s+(\d{3}:\d{2})/g;
+              var m = p.exec(lines[i]);
+              if(m != null){
+                credit = processTime(m[1]);
+                blocktot = processTime(m[2]);
+                duty = processTime(m[3]);
+                part2 = true;
+                part3 = true;
+                continue;
+              }
+            }
+            if(part4 == false){
+              var p = /TAFB:\s+(\d{3}:\d{2})/g;
+              var m = p.exec(lines[i]);
+              if(m != null){
+                tafb = processTime(m[1]);
+                part4 = true;
+                continue;
+              }
+            }
+            var p = /Crew Comp:\s+(\d)\s+CA,\s+(\d)/g;
+            var m = p.exec(lines[i]);
+            if(m != null){
+              ca = m[1];
+              fo = m[2];
+              function func2(a,b,c,d,e,f,g,h,i,j,k,l,m,n,o){
+                tx.executeSql('INSERT INTO pairings (refnum, pairing_number, checkin, checkout, length, month, year, credit, block_total, duty_total, TAFB, num_legs, num_dh, ca, fo) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', 
+                                                  [a,b,c,d,e,f,g,h,i,j,k,l,m,n,o]);
+              }
+              func2(count, pairNum, checkin, checkout, parseInt(length), month, parseInt(year), credit, blocktot, duty, tafb, numlegs, numdh, ca, fo);
+              pairNum=checkin=checkout=duty=month=year=credit=tafb=ca=fo=blocktot=null;
+              numlegs=numdh=0;
+              count += 1;
+              part1=part2=part3=part4=false;
+              continue;
+            }
+          }
+          pairingCount = count-1;
+          count = 1;
+          var subcount = 0;
+          var calendar = [];
+          var linecount = 0;
+          for(var i=0; i<lines.length; i++){
+            if(lines[i].startsWith("END")){
+              break;
+            }
+            var templine = lines[i].substr(77);
+            calendar.push(templine);
+          }
+          for(var i=0; i<calendar.length; i++){
+            if(calendar[i].startsWith("+---")){
+              subcount += 1;
+                if(subcount == 2){
+                  subcount = 0;
+                  linecount = 0;
+                  count += 1;
+                }
+            }
+            if(calendar[i].startsWith("|") && calendar[i].startsWith("|====") == false && calendar[i].startsWith("| S") == false){
+              linecount += 1;
+              for(var j=0; j<calendar[i].split(' ').length; j++){
+                var p = /\|*(\d{2})/g;
+                var m = p.exec(calendar[i].split(' ')[j]);
+                if(m != null){
+                  for(var k=1;k<m.length;k++){
+                    if(linecount == 1 && parseInt(m[k]) > 15){
+                      continue;
+                    }
+                    if(linecount == 5 && parseInt(m[k]) < 15){
+                      continue;
+                    }
+                    var day = parseInt(m[k]);
+                    function func3(a,b){
+                    tx.executeSql('INSERT INTO calendar (refnum, day) VALUES (?, ?)', [a, b]);
+                    }
+                    func3(count, day);
+                  }
+                }
+              }
+            }
+          }
+    		});
+    	}
+    })(f);
+    reader.readAsText(f);
+  }
+  document.getElementById('file').addEventListener('change', handleFileSelect, false);
+
+  function optToggle(id) {
+    var x = document.getElementById(id + "div");
+    if (x.style.display == "block") {
+        x.style.display = "none";
+    } else {
+        x.style.display = "block";
+    }
+  } 
+
+  function toggle(id){
+    var x = document.getElementById(id);
+    if (x.style.display == "block") {
+        x.style.display = "none";
+    } else {
+        x.style.display = "block";
+    }
+  }
+
+  function displayPairing(pairNum){
+    var x = document.getElementById('pairing');
+    while(x.hasChildNodes()){
+      x.removeChild(x.firstChild);
+    }
+    var pairingstartline;
+    for(var i=0;i<lines.length;i++){
+      if(lines[i].startsWith(pairNum)){
+        pairingstartline = i;
+        break;
+      }
+    }
+    var htmlOutput = '';
+    var i = pairingstartline
+    while(lines[i].startsWith("-----------------------------------------------") == false){
+      htmlOutput = htmlOutput + '<pre>' + lines[i] + '</pre>';
+      i += 1;
+    }
+    var frag = document.createRange().createContextualFragment(htmlOutput);
+    document.getElementById('pairing').appendChild(frag);
+  }
+
+  function displayResult(results){
+    var length = results.rows.length;
+    if(length == 0){
+      var frag = document.createRange().createContextualFragment('<p>No pairings found with given values</p>');
+      document.getElementById('resultsoutput').appendChild(frag);
+    }
+    else{
+      var columns = Object.keys(results.rows.item(0));
+      var htmlOutput =  '<h3>Showing    ' + length.toString() + '    of    ' + pairingCount.toString() + '    Pairings</h3>';
+      htmlOutput = htmlOutput + '<p>';
+      for(var i=0;i<columns.length; i++){
+        htmlOutput = htmlOutput + columns[i];
+        if(i<columns.length-1){
+          htmlOutput = htmlOutput + ' | ';
+        }
+      }
+      htmlOutput = htmlOutput + '</p><select size="10">'
+      for(var i=0;i<length;i++){
+        htmlOutput = htmlOutput + '<option value="' + results.rows.item(i)[columns[0]] + '" onclick="displayPairing(this.value)">';
+        for(var j=0;j<columns.length;j++){
+          if(columns[j] == 'checkin' || columns[j] == 'checkout' || columns[j] == 'TAFB' || columns[j] == 'softtime' || columns[j] == 'TAFBTT' || columns[j] == 'avgdailycredit' || columns[j] == 'block_total' || columns[j] == 'dep_loc_time' || columns[j] == 'arr_loc_time'){
+            htmlOutput = htmlOutput + reverseProcessTime(results.rows.item(i)[columns[j]]);
+            if(j<columns.length-1){
+              htmlOutput = htmlOutput + ' | ';
+            }
+          }
+          else{
+            htmlOutput = htmlOutput + results.rows.item(i)[columns[j]];
+            if(j<columns.length-1){
+              htmlOutput = htmlOutput + ' | ';
+            }
+          }
+        }
+        htmlOutput = htmlOutput + '</option>';
+      }
+      htmlOutput = htmlOutput + '</select>';
+      var frag = document.createRange().createContextualFragment(htmlOutput);
+      document.getElementById('resultsoutput').appendChild(frag);
+    }
+  }
+
+  function executecommand(){
+    var db = openDatabase('pairsort4db', '1.0', 'database for jb pairing files', 10 * 1024 * 1024);
+    if(sql_command != 'SELECT DISTINCT pairings.pairing_number FROM pairings JOIN legs ON pairings.refnum = legs.refnum WHERE '){
+    db.readTransaction( function (tx) {
+      tx.executeSql(sql_command, [], function (tx, results){
+        displayResult(results);
+      }, function (tx, error) {
+        console.log(error);
+      });
+    });
+    }
+    else{
+      var frag = document.createRange().createContextualFragment('<p>No options Selected</p>');
+      document.getElementById('resultsoutput').appendChild(frag);
+    }
+  }
+
+  function resetcommand(id){
+    toggle(id);
+    var x = document.getElementById('resultsoutput');
+    while(x.hasChildNodes()){
+      x.removeChild(x.firstChild);
+    }
+    var x = document.getElementById('pairing');
+    while(x.hasChildNodes()){
+      x.removeChild(x.firstChild);
+    }
+    first = true;
+    sql_command = 'SELECT DISTINCT pairings.pairing_number FROM pairings JOIN legs ON pairings.refnum = legs.refnum WHERE ';
+  }
+
+  function addtostring(x, y=''){
+    var replace = /pairings\.pairing_number/g;
+    var insert = 'pairings.pairing_number' + y;
+    sql_command = sql_command.replace(replace, insert);
+    if(first){
+      sql_command = sql_command + x;
+      first = false;
+    }
+    else{
+      var result = ' AND ';
+      result = result + x;
+      sql_command = sql_command + result;
+    }
+  }
+
+  function daysAvail(daysStr){
+    var days = [];
+    sql_command = 'SELECT DISTINCT pairings.pairing_number FROM pairings JOIN legs ON pairings.refnum = legs.refnum JOIN calendar ON pairings.refnum = calendar.refnum WHERE ';
+    for(var i=0;i<daysStr.length;i++){
+      var dayChar = daysStr.charAt(i);
+      if(isNaN(parseInt(dayChar)) == false){
+        if(isNaN(parseInt(daysStr.charAt(i+1))) == false){
+          var value = parseInt(daysStr.substring(i,i+2));
+          if(i+2<daysStr.length){
+            if(daysStr.charAt(i+2) == '-'){
+              i += 1;
+              continue;
+            }
+          }
+          i += 1;
+          days.push(value);
+        }
+        else{
+          var value = parseInt(daysStr.charAt(i));
+          if(i+1<daysStr.length){
+            if(daysStr.charAt(i+1) == '-'){
+              continue;
+            }
+          }
+          days.push(value);
+        }
+      }
+      else{
+        if(dayChar == '-'){
+          if(i-2>=0){
+            if(isNaN(parseInt(daysStr.charAt(i-2))) == false){
+              var prev = parseInt(daysStr.substring(i-2,i));
+            }
+            else{
+            var prev = parseInt(daysStr.charAt(i-1));
+            }
+          }
+          else{
+            var prev = parseInt(daysStr.charAt(i-1));
+          }
+          if(i+2<daysStr.length){  
+            if(isNaN(parseInt(daysStr.charAt(i+2))) == false){
+              var next = parseInt(daysStr.substring(i+1,i+3));
+            }
+            else{
+            var next = parseInt(daysStr.charAt(i+1));
+            }
+          }
+          else{
+            var next = parseInt(daysStr.charAt(i+1));
+          }
+          for(var j=prev;j<next;j++){
+            days.push(j);
+          }
+        }
+      }
+    }
+    var result = '(';
+    for(var i=0;i<days.length;i++){
+      result = result + 'calendar.day = ' + days[i];
+      if(i!=days.length-1){
+        result = result + ' OR ';
+      }
+    }
+    result = result + ')';
+    addtostring(result);
+  }
+
+  function lenTrip(length=1, sign){
+    var searchName = ', pairings.length';
+    var result = 'pairings.length ' + sign + ' ' + length.toString();
+    addtostring(result, searchName); 
+  }
+
+  function checkinTime(value='00:00', sign){
+    var searchName = ', pairings.checkin';
+    var temp = processTime(value);
+    var result = 'pairings.checkin ' + sign + ' ' + temp.toString();
+    addtostring(result, searchName);
+  }
+
+  function checkoutTime(value='00:00', sign){
+    var searchName = ', pairings.checkout';
+    var temp = processTime(value);
+    var result = 'pairings.checkout ' + sign + ' ' + temp.toString();
+    addtostring(result, searchName);
+  }
+
+  function TAFBTime(value='000:00', sign){
+    var searchName = ', pairings.TAFB';
+    var temp = processTime(value);
+    var result = 'pairings.TAFB = ' + sign + ' ' + temp.toString();
+    addtostring(result, searchName);
+  }
+
+  function landinCity(value){
+    var searchName = ', legs.arr_loc';
+    var result = 'legs.arr_loc = \'' + value + '\'';
+    addtostring(result, searchName);
+  }
+
+  function totLegs(value=2, sign){
+    var searchName = ', pairings.num_legs';
+    var result = 'pairings.num_legs ' + sign + ' ' + value;
+    addtostring(result, searchName);
+  }
+
+  function flightNumber(value){
+    var searchName = ', legs.flight_number';
+    var result = 'legs.flight_number = \'' + value + '\'';
+    addtostring(result, searchName);
+  }
+
+  function TAFBTT(value='000:00', sign){
+    var searchName = ', (pairings.TAFB / pairings.credit) AS TAFBTT';
+    var temp = processTime(value);
+    var result = 'pairings.TAFB / pairings.credit ' + sign + ' ' + temp.toString();
+    addtostring(result, searchName);
+  }
+
+  function avgdailyCredit(value='000:00', sign){
+    var searchName = ', (pairings.credit / pairings.length) AS avgdailycredit';
+    var temp = processTime(value);
+    var result = 'pairings.credit / pairings.length ' + sign + ' ' + temp.toString();
+    addtostring(result, searchName);
+  }
+
+  function totblockTime(value='000:00', sign){
+    var searchName = ', pairings.block_total';
+    var temp = processTime(value);
+    var result = 'pairings.block_total ' + sign + ' ' + temp.toString();
+    addtostring(result, searchName);
+  }
+
+  function redeye(value){
+    if(value == 'false'){
+      var result = 'legs.dep_loc_time NOT BETWEEN 1320 AND 1440 AND legs.arr_loc_time NOT BETWEEN 360 AND 420';
+      addtostring(result);
+    }
+  }
+
+  function numdeadHead(value=0, sign){
+    var searchName = ', pairings.num_dh';
+    var result = 'pairings.num_dh ' + sign + ' ' + value;
+    addtostring(result, searchName);
+  }
+
+  function totsoftTime(value='000:00', sign){
+    var searchName = ', (pairings.credit - pairings.block_total) AS softtime';
+    var temp = processTime(value);
+    var result = 'pairings.credit - pairings.block_total ' + sign + ' ' + temp.toString();
+    addtostring(result, searchName);
+  }
+
+  function search(){
+    var x = document.getElementById('optionsTable');
+      for(var i=1;i<15;i++){
+        var optNum = 'opt' + i.toString(10);
+        var checkBox = document.getElementById(optNum);
+        if(checkBox.checked){
+          if(optNum == 'opt1'){
+            valuediv = document.getElementById(optNum + 'div');
+            value = valuediv.childNodes[3].value;
+            daysAvail(value);
+          }
+          if(optNum == 'opt2'){
+            valuediv = document.getElementById(optNum + 'div');
+            value = valuediv.childNodes[3].value;
+            landinCity(value);
+          }
+          if(optNum == 'opt3'){
+            valuediv = document.getElementById(optNum + 'div');
+            sign = valuediv.childNodes[3].value;
+            value = valuediv.childNodes[5].value;
+            totblockTime(value, sign);
+          }
+          if(optNum == 'opt4'){
+            valuediv = document.getElementById(optNum + 'div');
+            sign = valuediv.childNodes[1].childNodes[1].value;
+            value = valuediv.childNodes[1].childNodes[3].value;
+            lenTrip(value, sign);
+          }
+          if(optNum == 'opt5'){
+            valuediv = document.getElementById(optNum + 'div');
+            sign = valuediv.childNodes[1].childNodes[1].value;
+            value = valuediv.childNodes[1].childNodes[3].value;
+            totLegs(value, sign);
+          }
+          if(optNum == 'opt6'){
+            valuediv = document.getElementById(optNum + 'div');
+            value = valuediv.childNodes[1].childNodes[1].value;
+            redeye(value);
+          }
+          if(optNum == 'opt7'){
+            valuediv = document.getElementById(optNum + 'div');
+            sign = valuediv.childNodes[3].value;
+            value = valuediv.childNodes[5].value;
+            checkinTime(value, sign);
+          }
+          if(optNum == 'opt8'){
+            valuediv = document.getElementById(optNum + 'div');
+            value = valuediv.childNodes[1].childNodes[1].value;
+            flightNumber(value);
+          }
+          if(optNum == 'opt9'){
+            valuediv = document.getElementById(optNum + 'div');
+            sign = valuediv.childNodes[1].childNodes[1].value;
+            value = valuediv.childNodes[1].childNodes[3].value;
+            numdeadHead(value, sign);
+          }
+          if(optNum == 'opt10'){
+            valuediv = document.getElementById(optNum + 'div');
+            sign = valuediv.childNodes[3].value;
+            value = valuediv.childNodes[5].value;
+            checkoutTime(value, sign);
+          }
+          if(optNum == 'opt11'){
+            valuediv = document.getElementById(optNum + 'div');
+            sign = valuediv.childNodes[3].value;
+            value = valuediv.childNodes[5].value;
+            TAFBTT(value, sign);
+          }
+          if(optNum == 'opt12'){
+            valuediv = document.getElementById(optNum + 'div');
+            sign = valuediv.childNodes[3].value;
+            value = valuediv.childNodes[5].value;
+            totsoftTime(value, sign);
+          }
+          if(optNum == 'opt13'){
+            valuediv = document.getElementById(optNum + 'div');
+            sign = valuediv.childNodes[3].value;
+            value = valuediv.childNodes[5].value;
+            TAFBTime(value, sign);
+          }
+          if(optNum == 'opt14'){
+            valuediv = document.getElementById(optNum + 'div');
+            sign = valuediv.childNodes[3].value;
+            value = valuediv.childNodes[5].value;
+            avgdailyCredit(value, sign);
+          }
+
+        }
+      }
+      executecommand();
+
+  }
+  document.getElementById('submitopts').addEventListener('click', search, false);
+
+  </script>
+
+    
+ </body>
+
+</html>
