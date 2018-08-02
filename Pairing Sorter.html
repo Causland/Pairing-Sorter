@@ -4,7 +4,7 @@
   <div id="header" align="center">
     <h1>Pairing Sorter</h1>
     <h3>Sorter for JetBlue Pairing Files</h3>
- 	  <input type="file" id="file" name="file" oninput="toggle('optionsmenu')">
+ 	  <input type="file" id="file" name="file" onclick="toggle('optionsmenu')">
     <output id="list"></output>
     <hr/>
   </div>
@@ -276,7 +276,7 @@
     var temp;
 
     var db = openDatabase('pairsortdb', '1.0', 'database for jb pairing files', 10 * 1024 * 1024);
-  	var f = evt.target.files[0];
+  	var f = document.getElementById('file').files[0];
     var reader = new FileReader();
 
 
@@ -574,20 +574,24 @@
       sql_command = sql_command.replace(replace, insert);
     }
     else{
-      var result = 'WHERE ' + x + ' AND ';
-      result = result + x;
-      sql_command = sql_command + result;
+      var insert = 'WHERE ' + x + ' AND ';
+      sql_command = sql_command.replace(replace, insert);
     }
+    var replace = /pairings.pairing_number$/g;
     if(first){
-      var replace = /pairings.pairing_number$/g;
-      if(alternate==''){
-        var insert = y + ' ' + order + ', pairings.pairing_number';
+      if(order!=''){
+        if(alternate==''){
+          var insert = y + ' ' + order + ', pairings.pairing_number';
+          sql_command = sql_command.replace(replace, insert);
+        }
       }
       else{
+        if(order!=''){
         var insert = alternate + ' ' + order + ', pairings.pairing_number';
+        sql_command = sql_command.replace(replace, insert);
+        }
       }
       first = false;
-      sql_command = sql_command.replace(replace, insert);
     }
   }
 
@@ -686,7 +690,7 @@
   function landinCity(value){
     var searchName = 'legs.arr_loc';
     var result = 'legs.arr_loc = \'' + value + '\'';
-    addtostring(result, searchName);
+    addtostring(result);
   }
 
   function daysAvail(daysStr){
