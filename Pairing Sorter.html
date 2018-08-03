@@ -4,7 +4,7 @@
   <div id="header" align="center">
     <h1>Pairing Sorter</h1>
     <h3>Sorter for JetBlue Pairing Files</h3>
-    <input type="file" id="file" name="file" onchange="toggle('optionsmenu')">
+    <input type="file" id="file" name="file" onchange="toggle('optionsmenu');handleFileSelect()">
     <output id="list"></output>
     <hr/>
   </div>
@@ -202,13 +202,13 @@
       </th>
     </tr>
     </table>
-    <input type="submit" value="Search" id="submitopts" ontouchstart="toggle('results')">
+    <input type="submit" value="Search" id="submitopts" onclick="toggle('results');search()"/>
     <hr/>
   </div>
   <div align="center" id="results" style="display:none">
     <h3>Results</h3>
     <p id=resultsoutput></p>
-    <input type="submit" value="Reset" id="reset" ontouchstart="resetcommand('results')"/>
+    <input type="submit" value="Reset" id="reset" onclick="resetcommand('results')"/>
     <hr/>
   </div>
   <div align="left" id="pairing">
@@ -440,7 +440,6 @@
     })(f);
     reader.readAsText(f);
   }
-  document.getElementById('file').addEventListener('change', handleFileSelect, false);
   function optToggle(id) {
     var x = document.getElementById(id + "div");
     if (x.style.display == "block") {
@@ -496,7 +495,7 @@
       }
       htmlOutput = htmlOutput + '</p><select size="10">'
       for(var i=0;i<length;i++){
-        htmlOutput = htmlOutput + '<option value="' + results.rows.item(i)[columns[0]] + '" ontouchstart="displayPairing(this.value)">';
+        htmlOutput = htmlOutput + '<option value="' + results.rows.item(i)[columns[0]] + '" onclick="displayPairing(this.value)">';
         for(var j=0;j<columns.length;j++){
           if(columns[j] == 'checkin' || columns[j] == 'checkout' || columns[j] == 'TAFB' || columns[j] == 'softtime' || columns[j] == 'TAFBTT' || columns[j] == 'avgdailycredit' || columns[j] == 'block_total' || columns[j] == 'dep_loc_time' || columns[j] == 'arr_loc_time'){
             htmlOutput = htmlOutput + reverseProcessTime(results.rows.item(i)[columns[j]]);
@@ -825,7 +824,6 @@
       }
       executecommand();
   }
-  document.getElementById('submitopts').addEventListener('touchstart', search, false);
   </script>
 
     
