@@ -202,13 +202,13 @@
       </th>
     </tr>
     </table>
-    <input type="submit" value="Search" id="submitopts" onclick="toggle('results')">
+    <input type="submit" value="Search" id="submitopts" ontouchstart="toggle('results')">
     <hr/>
   </div>
   <div align="center" id="results" style="display:none">
     <h3>Results</h3>
     <p id=resultsoutput></p>
-    <input type="submit" value="Reset" id="reset" onclick="resetcommand('results')"/>
+    <input type="submit" value="Reset" id="reset" ontouchstart="resetcommand('results')"/>
     <hr/>
   </div>
   <div align="left" id="pairing">
@@ -496,7 +496,7 @@
       }
       htmlOutput = htmlOutput + '</p><select size="10">'
       for(var i=0;i<length;i++){
-        htmlOutput = htmlOutput + '<option value="' + results.rows.item(i)[columns[0]] + '" onclick="displayPairing(this.value)">';
+        htmlOutput = htmlOutput + '<option value="' + results.rows.item(i)[columns[0]] + '" ontouchstart="displayPairing(this.value)">';
         for(var j=0;j<columns.length;j++){
           if(columns[j] == 'checkin' || columns[j] == 'checkout' || columns[j] == 'TAFB' || columns[j] == 'softtime' || columns[j] == 'TAFBTT' || columns[j] == 'avgdailycredit' || columns[j] == 'block_total' || columns[j] == 'dep_loc_time' || columns[j] == 'arr_loc_time'){
             htmlOutput = htmlOutput + reverseProcessTime(results.rows.item(i)[columns[j]]);
@@ -825,7 +825,7 @@
       }
       executecommand();
   }
-  document.getElementById('submitopts').addEventListener('click', search, false);
+  document.getElementById('submitopts').addEventListener('touchstart', search, false);
   </script>
 
     
