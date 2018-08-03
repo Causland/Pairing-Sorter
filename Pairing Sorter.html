@@ -569,14 +569,12 @@
           var insert = y + ' ' + order + ', pairings.pairing_number';
           sql_command = sql_command.replace(replace, insert);
         }
-      }
-      else{
-        if(order!=''){
-        var insert = alternate + ' ' + order + ', pairings.pairing_number';
-        sql_command = sql_command.replace(replace, insert);
+        else{
+          var insert = alternate + ' ' + order + ', pairings.pairing_number';
+          sql_command = sql_command.replace(replace, insert);
         }
+        first = false;
       }
-      first = false;
     }
   }
   function lenTrip(length=1, sign){
@@ -733,8 +731,9 @@
   }
   function search(){
     var x = document.getElementById('optionsTable');
-      for(var i=1;i<15;i++){
-        var optNum = 'opt' + i.toString(10);
+      var optNums = [3, 5, 7, 8, 9, 10, 11, 12, 13, 14, 4, 8, 6, 2, 1];
+      for(var i=0;i<14;i++){
+        var optNum = 'opt' + optNums[i].toString(10);
         var checkBox = document.getElementById(optNum);
         if(checkBox.checked){
           if(optNum == 'opt3'){
@@ -742,12 +741,6 @@
             sign = valuediv.childNodes[3].value;
             value = valuediv.childNodes[5].value;
             totblockTime(value, sign);
-          }
-          if(optNum == 'opt4'){
-            valuediv = document.getElementById(optNum + 'div');
-            sign = valuediv.childNodes[1].childNodes[1].value;
-            value = valuediv.childNodes[1].childNodes[3].value;
-            lenTrip(value, sign);
           }
           if(optNum == 'opt5'){
             valuediv = document.getElementById(optNum + 'div');
@@ -801,6 +794,12 @@
             sign = valuediv.childNodes[3].value;
             value = valuediv.childNodes[5].value;
             avgdailyCredit(value, sign);
+          }
+          if(optNum == 'opt4'){
+            valuediv = document.getElementById(optNum + 'div');
+            sign = valuediv.childNodes[1].childNodes[1].value;
+            value = valuediv.childNodes[1].childNodes[3].value;
+            lenTrip(value, sign);
           }
           if(optNum == 'opt8'){
             valuediv = document.getElementById(optNum + 'div');
