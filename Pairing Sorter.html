@@ -4,7 +4,7 @@
   <div id="header" align="center">
     <h1>Pairing Sorter</h1>
     <h3>Sorter for JetBlue Pairing Files</h3>
- 	  <input type="file" id="file" name="file" oninput="toggle('optionsmenu')">
+    <input type="file" id="file" name="file" onchange="toggle('optionsmenu')">
     <output id="list"></output>
     <hr/>
   </div>
@@ -216,10 +216,8 @@
     
 
   <script language="javascript" type="text/javascript">
-
     first = true;
     sql_command = 'SELECT DISTINCT pairings.pairing_number FROM pairings JOIN legs ON pairings.refnum = legs.refnum WHERE ORDER BY pairings.pairing_number';
-
   function processTime(strtime){
     var timelist = strtime.split(":");
     var hours = parseInt(timelist[0]);
@@ -227,7 +225,6 @@
     var totalmin = minutes + (hours * 60);
     return totalmin;
   }
-
   function reverseProcessTime(totalmin){
     var hours = Math.floor(totalmin/60);
     var minutes = Math.abs(totalmin%60);
@@ -239,7 +236,6 @@
     }
     return strtime;
   }
-
   function handleFileSelect(evt) {
     var months = {"JAN": 1, "FEB": 2, "MAR": 3, "APR": 4, "MAY": 5, "JUN": 6, "JUL": 7, "AUG": 8, "SEP": 9, "SEPT": 9, "OCT": 10, "NOV": 11, "DEC": 12};
     var pairNum = undefined;
@@ -270,16 +266,12 @@
     var part2=false;
     var part3=false;
     var part4=false;
-
     var count = 1;
     lines = [];
     var temp;
-
     var db = openDatabase('pairsortdb', '1.0', 'database for jb pairing files', 10 * 1024 * 1024);
-  	var f = evt.target.files[0];
+    var f = document.getElementById('file').files[0];
     var reader = new FileReader();
-
-
     reader.onload = (function(theFile) {
       return function(e) {
         db.transaction(function (tx) {
@@ -290,11 +282,11 @@
           tx.executeSql('DELETE FROM legs');
           tx.executeSql('DELETE FROM calendar');
         });
-    			var temp = e.target.result;
-    			splittemp = temp.split("\n");
-    			for(var i = 0; i<splittemp.length; i++){
-    				lines.push(splittemp[i]);
-    			}
+          var temp = e.target.result;
+          splittemp = temp.split("\n");
+          for(var i = 0; i<splittemp.length; i++){
+            lines.push(splittemp[i]);
+          }
           db.transaction(function (tx) {
           for(var i=0; i<lines.length; i++){
             if(lines[i].startsWith("+--")){
@@ -443,13 +435,12 @@
               }
             }
           }
-    		});
-    	}
+        });
+      }
     })(f);
     reader.readAsText(f);
   }
   document.getElementById('file').addEventListener('change', handleFileSelect, false);
-
   function optToggle(id) {
     var x = document.getElementById(id + "div");
     if (x.style.display == "block") {
@@ -458,7 +449,6 @@
         x.style.display = "block";
     }
   } 
-
   function toggle(id){
     var x = document.getElementById(id);
     if (x.style.display == "block") {
@@ -467,7 +457,6 @@
         x.style.display = "block";
     }
   }
-
   function displayPairing(pairNum){
     var x = document.getElementById('pairing');
     while(x.hasChildNodes()){
@@ -489,7 +478,6 @@
     var frag = document.createRange().createContextualFragment(htmlOutput);
     document.getElementById('pairing').appendChild(frag);
   }
-
   function displayResult(results){
     var length = results.rows.length;
     if(length == 0){
@@ -530,7 +518,6 @@
       document.getElementById('resultsoutput').appendChild(frag);
     }
   }
-
   function executecommand(){
     var db = openDatabase('pairsortdb', '1.0', 'database for jb pairing files', 10 * 1024 * 1024);
     if(sql_command != 'SELECT DISTINCT pairings.pairing_number FROM pairings JOIN legs ON pairings.refnum = legs.refnum WHERE ORDER BY pairings.pairing_number'){
@@ -547,7 +534,6 @@
       document.getElementById('resultsoutput').appendChild(frag);
     }
   }
-
   function resetcommand(id){
     toggle(id);
     var x = document.getElementById('resultsoutput');
@@ -561,7 +547,6 @@
     first = true;
     sql_command = 'SELECT DISTINCT pairings.pairing_number FROM pairings JOIN legs ON pairings.refnum = legs.refnum WHERE ORDER BY pairings.pairing_number';
   }
-
   function addtostring(x, y='', order='', alternate =''){
     if(y!=''){
       var replace = /DISTINCT\spairings\.pairing_number/g;
@@ -574,30 +559,32 @@
       sql_command = sql_command.replace(replace, insert);
     }
     else{
-      var result = 'WHERE ' + x + ' AND ';
-      result = result + x;
-      sql_command = sql_command + result;
-    }
-    if(first){
-      var replace = /pairings.pairing_number$/g;
-      if(alternate==''){
-        var insert = y + ' ' + order + ', pairings.pairing_number';
-      }
-      else{
-        var insert = alternate + ' ' + order + ', pairings.pairing_number';
-      }
-      first = false;
+      var insert = 'WHERE ' + x + ' AND ';
       sql_command = sql_command.replace(replace, insert);
     }
+    var replace = /pairings.pairing_number$/g;
+    if(first){
+      if(order!=''){
+        if(alternate==''){
+          var insert = y + ' ' + order + ', pairings.pairing_number';
+          sql_command = sql_command.replace(replace, insert);
+        }
+      }
+      else{
+        if(order!=''){
+        var insert = alternate + ' ' + order + ', pairings.pairing_number';
+        sql_command = sql_command.replace(replace, insert);
+        }
+      }
+      first = false;
+    }
   }
-
   function lenTrip(length=1, sign){
     var searchName = 'pairings.length';
     var order = 'ASC';
     var result = 'pairings.length ' + sign + ' ' + length.toString();
     addtostring(result, searchName, order); 
   }
-
   function checkinTime(value='00:00', sign){
     var searchName = 'pairings.checkin';
     var order = 'ASC';
@@ -605,7 +592,6 @@
     var result = 'pairings.checkin ' + sign + ' ' + temp.toString();
     addtostring(result, searchName, order);
   }
-
   function checkoutTime(value='00:00', sign){
     var searchName = 'pairings.checkout';
     var order = 'ASC';
@@ -613,7 +599,6 @@
     var result = 'pairings.checkout ' + sign + ' ' + temp.toString();
     addtostring(result, searchName, order);
   }
-
   function TAFBTime(value='000:00', sign){
     var searchName = 'pairings.TAFB';
     var order = 'ASC';
@@ -621,14 +606,12 @@
     var result = 'pairings.TAFB = ' + sign + ' ' + temp.toString();
     addtostring(result, searchName, order);
   }
-
   function totLegs(value=2, sign){
     var searchName = 'pairings.num_legs';
     var order = 'ASC';
     var result = 'pairings.num_legs ' + sign + ' ' + value;
     addtostring(result, searchName, order);
   }
-
   function TAFBTT(value='000:00', sign){
     var searchName = '(pairings.TAFB / pairings.credit) AS Ratio';
     var alternate = 'Ratio';
@@ -637,7 +620,6 @@
     var result = 'pairings.TAFB / pairings.credit ' + sign + ' ' + temp.toString();
     addtostring(result, searchName, order, alternate);
   }
-
   function avgdailyCredit(value='000:00', sign){
     var searchName = '(pairings.credit / pairings.length) AS avgdailycredit';
     var alternate = 'avgdailycredit';
@@ -646,7 +628,6 @@
     var result = 'pairings.credit / pairings.length ' + sign + ' ' + temp.toString();
     addtostring(result, searchName, order, alternate);
   }
-
   function totblockTime(value='000:00', sign){
     var searchName = 'pairings.block_total';
     var order = 'ASC';
@@ -654,14 +635,12 @@
     var result = 'pairings.block_total ' + sign + ' ' + temp.toString();
     addtostring(result, searchName, order);
   }
-
   function numdeadHead(value=0, sign){
     var searchName = 'pairings.num_dh';
     var order = 'ASC';
     var result = 'pairings.num_dh ' + sign + ' ' + value;
     addtostring(result, searchName, order);
   }
-
   function totsoftTime(value='000:00', sign){
     var searchName = '(pairings.credit - pairings.block_total) AS softtime';
     var order = 'ASC';
@@ -669,26 +648,22 @@
     var result = 'pairings.credit - pairings.block_total ' + sign + ' ' + temp.toString();
     addtostring(result, searchName, order);
   }
-
   function flightNumber(value){
     var searchName = 'legs.flight_number';
     var result = 'legs.flight_number = \'' + value + '\'';
     addtostring(result, searchName);
   }
-
   function redeye(value){
     if(value == 'false'){
       var result = 'legs.dep_loc_time NOT BETWEEN 1320 AND 1440 AND legs.arr_loc_time NOT BETWEEN 360 AND 420';
       addtostring(result);
     }
   }
-
   function landinCity(value){
     var searchName = 'legs.arr_loc';
     var result = 'legs.arr_loc = \'' + value + '\'';
-    addtostring(result, searchName);
+    addtostring(result);
   }
-
   function daysAvail(daysStr){
     var days = [];
     sql_command = 'SELECT DISTINCT pairings.pairing_number FROM pairings JOIN legs ON pairings.refnum = legs.refnum JOIN calendar ON pairings.refnum = calendar.refnum WHERE ';
@@ -756,7 +731,6 @@
     result = result + ')';
     addtostring(result);
   }
-
   function search(){
     var x = document.getElementById('optionsTable');
       for(var i=1;i<15;i++){
@@ -851,10 +825,8 @@
         }
       }
       executecommand();
-
   }
   document.getElementById('submitopts').addEventListener('click', search, false);
-
   </script>
 
     
