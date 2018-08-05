@@ -493,7 +493,7 @@
           htmlOutput = htmlOutput + ' | ';
         }
       }
-      htmlOutput = htmlOutput + '</p><select size="10">'
+      htmlOutput = htmlOutput + '</p><select size="10">';
       for(var i=0;i<length;i++){
         htmlOutput = htmlOutput + '<option value="' + results.rows.item(i)[columns[0]] + '" onclick="displayPairing(this.value)">';
         for(var j=0;j<columns.length;j++){
@@ -518,7 +518,7 @@
     }
   }
   function executecommand(){
-    var db = openDatabase('pairsortdb', '1.0', 'database for jb pairing files', 10 * 1024 * 1024);
+    var db = openDatabase('pairsortdb', '1.0', 'database for jb pairing files', 5 * 1024 * 1024);
     if(sql_command != 'SELECT DISTINCT pairings.pairing_number FROM pairings JOIN legs ON pairings.refnum = legs.refnum WHERE ORDER BY pairings.pairing_number'){
     db.readTransaction( function (tx) {
       tx.executeSql(sql_command, [], function (tx, results){
@@ -731,7 +731,7 @@
   function search(){
     var x = document.getElementById('optionsTable');
       var optNums = [3, 5, 7, 8, 9, 10, 11, 12, 13, 14, 4, 8, 6, 2, 1];
-      for(var i=0;i<14;i++){
+      for(var i=0;i<optNums.length;i++){
         var optNum = 'opt' + optNums[i].toString(10);
         var checkBox = document.getElementById(optNum);
         if(checkBox.checked){
