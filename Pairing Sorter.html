@@ -4,8 +4,9 @@
   <div id="header" align="center">
     <h1>Pairing Sorter</h1>
     <h3>Sorter for JetBlue Pairing Files</h3>
-    <input type="file" id="file" name="file" onchange="toggle('optionsmenu');handleFileSelect()">
+    <input type="file" id="file" name="file" onchange="handleFileSelect()">
     <output id="list"></output>
+    <p id=progressbar></p>
     <hr/>
   </div>
   <div align="center" id="optionsmenu" style="display:none">
@@ -218,6 +219,32 @@
   <script language="javascript" type="text/javascript">
     first = true;
     sql_command = 'SELECT DISTINCT pairings.pairing_number FROM pairings JOIN legs ON pairings.refnum = legs.refnum WHERE ORDER BY pairings.pairing_number';
+
+  function toggle(id){
+    var x = document.getElementById(id);
+    if (x.style.display == "block") {
+        x.style.display = "none";
+    } else {
+        x.style.display = "block";
+    }
+  }
+
+  function progressBar(progress){
+    var x = document.getElementById('progressbar');
+    while(x.hasChildNodes()){
+      x.removeChild(x.firstChild);
+    }
+    if(progress == 0){
+      var htmlOutput = '<p>Processing...</p>';
+    }
+    else{
+      var htmlOutput = '<p>Ready to Sort</p>';
+      toggle('optionsmenu');
+    }
+    var frag = document.createRange().createContextualFragment(htmlOutput);
+    document.getElementById('progressbar').appendChild(frag);
+  }
+
   function processTime(strtime){
     var timelist = strtime.split(":");
     var hours = parseInt(timelist[0]);
@@ -269,7 +296,8 @@
     var count = 1;
     lines = [];
     var temp;
-    var db = openDatabase('pairsortdb', '1.0', 'database for jb pairing files', 10 * 1024 * 1024);
+    progressBar(0);
+    var db = openDatabase('pairsortdb', '1.0', 'database for jb pairing files', 5 * 1024 * 1024);
     var f = document.getElementById('file').files[0];
     var reader = new FileReader();
     reader.readAsText(f);
@@ -431,6 +459,7 @@
                     tx.executeSql('INSERT INTO calendar (refnum, day) VALUES (?, ?)', [a, b]);
                     }
                     func3(count, day);
+                    progressBar(100);
                   }
                 }
               }
@@ -448,14 +477,6 @@
         x.style.display = "block";
     }
   } 
-  function toggle(id){
-    var x = document.getElementById(id);
-    if (x.style.display == "block") {
-        x.style.display = "none";
-    } else {
-        x.style.display = "block";
-    }
-  }
   function displayPairing(pairNum){
     var x = document.getElementById('pairing');
     while(x.hasChildNodes()){
@@ -646,9 +667,8 @@
     addtostring(result, searchName, order);
   }
   function flightNumber(value){
-    var searchName = 'legs.flight_number';
     var result = 'legs.flight_number = \'' + value + '\'';
-    addtostring(result, searchName);
+    addtostring(result);
   }
   function redeye(value){
     if(value == 'false'){
@@ -730,7 +750,7 @@
   }
   function search(){
     var x = document.getElementById('optionsTable');
-      var optNums = [3, 5, 7, 8, 9, 10, 11, 12, 13, 14, 4, 8, 6, 2, 1];
+      var optNums = [12, 14, 11, 7, 3, 10, 13, 9, 5, 4, 8, 6, 2, 1];
       for(var i=0;i<optNums.length;i++){
         var optNum = 'opt' + optNums[i].toString(10);
         var checkBox = document.getElementById(optNum);
@@ -752,11 +772,6 @@
             sign = valuediv.childNodes[3].value;
             value = valuediv.childNodes[5].value;
             checkinTime(value, sign);
-          }
-          if(optNum == 'opt8'){
-            valuediv = document.getElementById(optNum + 'div');
-            value = valuediv.childNodes[1].childNodes[1].value;
-            flightNumber(value);
           }
           if(optNum == 'opt9'){
             valuediv = document.getElementById(optNum + 'div');
