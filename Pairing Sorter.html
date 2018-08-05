@@ -1,5 +1,7 @@
 <!DOCTYPE html>
 <html manifest="pairsort.appcache">
+  <link rel="apple-touch-icon" sizes="114x114" href="icon-114x114.png"/>
+  <link rel="apple-touch-icon" sizes="144x144" href="icon-144x144.png"/>
  <body>
   <div id="header" align="center">
     <h1>Pairing Sorter</h1>
@@ -514,9 +516,9 @@
           htmlOutput = htmlOutput + ' | ';
         }
       }
-      htmlOutput = htmlOutput + '</p><select size="10">';
+      htmlOutput = htmlOutput + '</p><select size="10" id="pairingselect">';
       for(var i=0;i<length;i++){
-        htmlOutput = htmlOutput + '<option value="' + results.rows.item(i)[columns[0]] + '" onclick="displayPairing(this.value)">';
+        htmlOutput = htmlOutput + '<option value="' + results.rows.item(i)[columns[0]] + '">';
         for(var j=0;j<columns.length;j++){
           if(columns[j] == 'checkin' || columns[j] == 'checkout' || columns[j] == 'TAFB' || columns[j] == 'softtime' || columns[j] == 'TAFBTT' || columns[j] == 'avgdailycredit' || columns[j] == 'block_total' || columns[j] == 'dep_loc_time' || columns[j] == 'arr_loc_time'){
             htmlOutput = htmlOutput + reverseProcessTime(results.rows.item(i)[columns[j]]);
@@ -533,7 +535,7 @@
         }
         htmlOutput = htmlOutput + '</option>';
       }
-      htmlOutput = htmlOutput + '</select>';
+      htmlOutput = htmlOutput + '</select><input type="submit" value="View" id="view" onclick="displayPairing(document.getElementById(\'pairingselect\').value)"/>';
       var frag = document.createRange().createContextualFragment(htmlOutput);
       document.getElementById('resultsoutput').appendChild(frag);
     }
