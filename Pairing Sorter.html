@@ -4,8 +4,9 @@
   <div id="header" align="center">
     <h1>Pairing Sorter</h1>
     <h3>Sorter for JetBlue Pairing Files</h3>
-    <input type="file" id="file" name="file" onchange="toggle('optionsmenu');handleFileSelect()">
+    <input type="file" id="file" name="file" onchange="handleFileSelect()">
     <output id="list"></output>
+    <p id=progressbar></p>
     <hr/>
   </div>
   <div align="center" id="optionsmenu" style="display:none">
@@ -218,6 +219,32 @@
   <script language="javascript" type="text/javascript">
     first = true;
     sql_command = 'SELECT DISTINCT pairings.pairing_number FROM pairings JOIN legs ON pairings.refnum = legs.refnum WHERE ORDER BY pairings.pairing_number';
+
+  function toggle(id){
+    var x = document.getElementById(id);
+    if (x.style.display == "block") {
+        x.style.display = "none";
+    } else {
+        x.style.display = "block";
+    }
+  }
+
+  function progressBar(progress){
+    var x = document.getElementById('progressbar');
+    while(x.hasChildNodes()){
+      x.removeChild(x.firstChild);
+    }
+    if(progress == 0){
+      var htmlOutput = '<p>Processing...</p>';
+    }
+    else{
+      var htmlOutput = '<p>Ready to Sort</p>';
+      toggle('optionsmenu');
+    }
+    var frag = document.createRange().createContextualFragment(htmlOutput);
+    document.getElementById('progressbar').appendChild(frag);
+  }
+
   function processTime(strtime){
     var timelist = strtime.split(":");
     var hours = parseInt(timelist[0]);
@@ -269,6 +296,7 @@
     var count = 1;
     lines = [];
     var temp;
+    progressBar(0);
     var db = openDatabase('pairsortdb', '1.0', 'database for jb pairing files', 10 * 1024 * 1024);
     var f = document.getElementById('file').files[0];
     var reader = new FileReader();
@@ -431,6 +459,7 @@
                     tx.executeSql('INSERT INTO calendar (refnum, day) VALUES (?, ?)', [a, b]);
                     }
                     func3(count, day);
+                    progressBar(100);
                   }
                 }
               }
@@ -448,14 +477,6 @@
         x.style.display = "block";
     }
   } 
-  function toggle(id){
-    var x = document.getElementById(id);
-    if (x.style.display == "block") {
-        x.style.display = "none";
-    } else {
-        x.style.display = "block";
-    }
-  }
   function displayPairing(pairNum){
     var x = document.getElementById('pairing');
     while(x.hasChildNodes()){
