@@ -667,9 +667,8 @@
     addtostring(result, searchName, order);
   }
   function flightNumber(value){
-    var searchName = 'legs.flight_number';
     var result = 'legs.flight_number = \'' + value + '\'';
-    addtostring(result, searchName);
+    addtostring(result);
   }
   function redeye(value){
     if(value == 'false'){
@@ -751,7 +750,7 @@
   }
   function search(){
     var x = document.getElementById('optionsTable');
-      var optNums = [3, 5, 7, 8, 9, 10, 11, 12, 13, 14, 4, 8, 6, 2, 1];
+      var optNums = [3, 5, 7, 9, 10, 11, 12, 13, 14, 4, 8, 6, 2, 1];
       for(var i=0;i<optNums.length;i++){
         var optNum = 'opt' + optNums[i].toString(10);
         var checkBox = document.getElementById(optNum);
@@ -773,11 +772,6 @@
             sign = valuediv.childNodes[3].value;
             value = valuediv.childNodes[5].value;
             checkinTime(value, sign);
-          }
-          if(optNum == 'opt8'){
-            valuediv = document.getElementById(optNum + 'div');
-            value = valuediv.childNodes[1].childNodes[1].value;
-            flightNumber(value);
           }
           if(optNum == 'opt9'){
             valuediv = document.getElementById(optNum + 'div');
