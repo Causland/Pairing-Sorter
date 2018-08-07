@@ -695,11 +695,6 @@
     addtostring(result, searchName, order, alternate);
   }
   function flightNumber(value){
-    if(value.length<=3){
-      while(length < 4){
-        value = '0' + value;
-      }
-    }
     var result = 'legs.flight_number = \'' + value + '\'';
     addtostring(result);
   }
@@ -851,6 +846,11 @@
           if(optNum == 'opt8'){
             valuediv = document.getElementById(optNum + 'div');
             value = valuediv.childNodes[1].childNodes[1].value;
+            if(value.length<=3){
+              while(length < 4){
+                value = '0' + value;
+              }
+            }
             flightNumber(value);
           }
           if(optNum == 'opt6'){
