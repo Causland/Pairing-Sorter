@@ -663,10 +663,11 @@
   }
   function totsoftTime(value='000:00', sign){
     var searchName = '(pairings.credit - pairings.block_total) AS softtime';
+    var alternate = 'softtime';
     var order = 'ASC';
     var temp = processTime(value);
     var result = 'pairings.credit - pairings.block_total ' + sign + ' ' + temp.toString();
-    addtostring(result, searchName, order);
+    addtostring(result, searchName, order, alternate);
   }
   function flightNumber(value){
     var result = 'legs.flight_number = \'' + value + '\'';
