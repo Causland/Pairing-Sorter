@@ -205,13 +205,12 @@
       </th>
     </tr>
     </table>
-    <input type="submit" value="Search" id="submitopts" onclick="toggle('results');search()"/>
+    <input type="submit" value="Search" id="submitopts" onclick="resetcommand();searchToggle();search()"/>
     <hr/>
   </div>
   <div align="center" id="results" style="display:none">
     <h3>Results</h3>
     <p id=resultsoutput></p>
-    <input type="submit" value="Reset" id="reset" onclick="resetcommand('results')"/>
     <hr/>
   </div>
   <div align="left" id="pairing">
@@ -227,6 +226,13 @@
     if (x.style.display == "block") {
         x.style.display = "none";
     } else {
+        x.style.display = "block";
+    }
+  }
+
+  function searchToggle(){
+    var x = document.getElementById('results');
+    if (x.style.display == "none") {
         x.style.display = "block";
     }
   }
@@ -545,7 +551,7 @@
         }
         htmlOutput = htmlOutput + '</option>';
       }
-      htmlOutput = htmlOutput + '</select><input type="submit" value="View" id="view" onclick="displayPairing(document.getElementById(\'pairingselect\').value)"/>';
+      htmlOutput = htmlOutput + '</select><p><input type="submit" value="View" id="view" onclick="displayPairing(document.getElementById(\'pairingselect\').value)"/></p>';
       var frag = document.createRange().createContextualFragment(htmlOutput);
       document.getElementById('resultsoutput').appendChild(frag);
     }
@@ -566,8 +572,7 @@
       document.getElementById('resultsoutput').appendChild(frag);
     }
   }
-  function resetcommand(id){
-    toggle(id);
+  function resetcommand(){
     var x = document.getElementById('resultsoutput');
     while(x.hasChildNodes()){
       x.removeChild(x.firstChild);
