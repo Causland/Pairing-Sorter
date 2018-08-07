@@ -434,6 +434,16 @@
             var templine = lines[i].substr(77);
             calendar.push(templine);
           }
+          finallinenum = 0;
+          for(var i=0; i<calendar.length; i++){
+            if(calendar[i].startsWith("|====")){
+              while(calendar[i+1].startsWith("+---") == false){
+                finallinenum += 1;
+                i++;
+              }
+              break;
+            }
+          }
           for(var i=0; i<calendar.length; i++){
             if(calendar[i].startsWith("+---")){
               subcount += 1;
@@ -453,7 +463,7 @@
                     if(linecount == 1 && parseInt(m[k]) > 15){
                       continue;
                     }
-                    if(linecount == 5 && parseInt(m[k]) < 15){
+                    if(linecount == finallinenum && parseInt(m[k]) < 15){
                       continue;
                     }
                     var day = parseInt(m[k]);
@@ -461,12 +471,12 @@
                     tx.executeSql('INSERT INTO calendar (refnum, day) VALUES (?, ?)', [a, b]);
                     }
                     func3(count, day);
-                    progressBar(100);
                   }
                 }
               }
             }
           }
+          progressBar(100);
         });
       }
     })(f);
