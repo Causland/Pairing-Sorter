@@ -238,7 +238,7 @@
       </font>
     </p>
     <p style="margin:3px">
-      <font size="-1">Made by Chris Auslander 2018</font>
+      <font size="-1">Made by Chris Auslander 2018 V1.3</font>
     </p>
   <div>
 
@@ -541,6 +541,34 @@
     var frag = document.createRange().createContextualFragment(htmlOutput);
     document.getElementById('pairing').appendChild(frag);
   }
+
+  function displayAllPairings(){
+    var x = document.getElementById('pairingselect');
+    var pairNumArr = [];
+    for(var i=0; i<x.options.length;i++){
+      pairNumArr.push(x.options[i].value);
+    }
+    for(var j=0;j<pairNumArr.length;j++){
+      var pairingstartline;
+      var pairNum = pairNumArr[j];
+      for(var i=0;i<lines.length;i++){
+        if(lines[i].startsWith(pairNum)){
+          pairingstartline = i;
+          break;
+        }
+      }
+      var htmlOutput = '';
+      var i = pairingstartline
+      while(lines[i].startsWith("-----------------------------------------------") == false){
+        htmlOutput = htmlOutput + '<pre>' + lines[i] + '</pre>';
+        i += 1;
+      }
+      htmlOutput = htmlOutput + '<pre>' + "####################################################################################################" + '</pre>';
+      var frag = document.createRange().createContextualFragment(htmlOutput);
+      document.getElementById('pairing').appendChild(frag);
+    }
+  }
+
   function displayResult(results){
     var length = results.rows.length;
     if(length == 0){
@@ -576,7 +604,7 @@
         }
         htmlOutput = htmlOutput + '</option>';
       }
-      htmlOutput = htmlOutput + '</select><p><input type="submit" value="View" id="view" onclick="displayPairing(document.getElementById(\'pairingselect\').value)"/></p>';
+      htmlOutput = htmlOutput + '</select><p><input type="submit" value="View" id="view" onclick="displayPairing(document.getElementById(\'pairingselect\').value)"/></p><p><input type="submit" value="View All" id="viewall" onclick="displayAllPairings()"/></p>';
       var frag = document.createRange().createContextualFragment(htmlOutput);
       document.getElementById('resultsoutput').appendChild(frag);
     }
