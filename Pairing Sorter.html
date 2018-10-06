@@ -213,6 +213,18 @@
           <input type="text"/>
         </div>
       </th>
+      <th>
+        <input type="checkbox" id="opt15" align="left" onchange="optToggle(this.id)">Total Credit
+        <div id="opt15div" style="display:none">
+          <p>Credit (---:--)</p>
+          <select name="sign">
+            <option value=">=">>=</option>
+            <option value="<="><=</option>
+            <option value="=">=</option>
+          </select>
+          <input type="text"/>
+        </div>
+      </th>
     </tr>
     </table>
     <input type="submit" value="Search" id="submitopts" onclick="resetcommand();searchToggle();search()"/>
@@ -244,7 +256,7 @@
       </font>
     </p>
     <p style="margin:3px">
-      <font size="-1">Made by Chris Auslander 2018 V1.4</font>
+      <font size="-1">Made by Chris Auslander 2018 V2.0</font>
     </p>
   <div>
 
@@ -595,7 +607,7 @@
       for(var i=0;i<length;i++){
         htmlOutput = htmlOutput + '<option value="' + results.rows.item(i)[columns[0]] + '">';
         for(var j=0;j<columns.length;j++){
-          if(columns[j] == 'checkin' || columns[j] == 'checkout' || columns[j] == 'TAFB' || columns[j] == 'softtime' || columns[j] == 'TAFBTT' || columns[j] == 'avgdailycredit' || columns[j] == 'block_total' || columns[j] == 'dep_loc_time' || columns[j] == 'arr_loc_time'){
+          if(columns[j] == 'checkin' || columns[j] == 'credit' || columns[j] == 'checkout' || columns[j] == 'TAFB' || columns[j] == 'softtime' || columns[j] == 'TAFBTT' || columns[j] == 'avgdailycredit' || columns[j] == 'block_total' || columns[j] == 'dep_loc_time' || columns[j] == 'arr_loc_time'){
             htmlOutput = htmlOutput + reverseProcessTime(results.rows.item(i)[columns[j]]);
             if(j<columns.length-1){
               htmlOutput = htmlOutput + ' | ';
@@ -729,6 +741,13 @@
     var result = 'pairings.block_total ' + sign + ' ' + temp.toString();
     addtostring(result, searchName, order);
   }
+  function totcredit(value='000:00', sign){
+    var searchName = 'pairings.credit';
+    var order = 'ASC';
+    var temp = processTime(value);
+    var result = 'pairings.credit ' + sign + ' ' + temp.toString();
+    addtostring(result, searchName, order);
+  }
   function numdeadHead(value=0, sign){
     var searchName = 'pairings.num_dh';
     var order = 'ASC';
@@ -827,7 +846,7 @@
   }
   function search(){
     var x = document.getElementById('optionsTable');
-      var optNums = [12, 14, 11, 7, 3, 10, 13, 9, 5, 4, 8, 6, 2, 1];
+      var optNums = [12, 14, 15, 11, 7, 3, 10, 13, 9, 5, 4, 8, 6, 2, 1];
       for(var i=0;i<optNums.length;i++){
         var optNum = 'opt' + optNums[i].toString(10);
         var checkBox = document.getElementById(optNum);
@@ -837,6 +856,12 @@
             sign = valuediv.childNodes[3].value;
             value = valuediv.childNodes[5].value;
             totblockTime(value, sign);
+          }
+          if(optNum == 'opt15'){
+            valuediv = document.getElementById(optNum + 'div');
+            sign = valuediv.childNodes[3].value;
+            value = valuediv.childNodes[5].value;
+            totcredit(value, sign);
           }
           if(optNum == 'opt5'){
             valuediv = document.getElementById(optNum + 'div');
